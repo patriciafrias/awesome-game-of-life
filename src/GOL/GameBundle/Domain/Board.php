@@ -28,6 +28,21 @@ class Board
     {
         $this->height = $gridHeight;
         $this->width = $gridWidth;
+
+        $this->initialize();
+    }
+
+    /**
+     * Initializes a board with given dimensions.
+     */
+    public function initialize()
+    {
+        for ($x=0; $x<$this->width; $x++) {
+            $this->status[] = [];
+            for ($y=0; $y<$this->height; $y++) {
+                $this->status[$x][$y] = '';
+            }
+        }
     }
 
     /**
