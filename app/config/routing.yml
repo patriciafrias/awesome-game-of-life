@@ -1,0 +1,3 @@
+gol_game:
+    resource: "@GOLGameBundle/Resources/config/routing.yml"
+    prefix:   /

@@ -1,0 +1,3 @@
+gol_game_homepage:
+    path:     /
+    defaults: { _controller: GOLGameBundle:Default:index }

@@ -1,0 +1,108 @@
+version: '2'
+
+#volumes:
+#  mysql_master_data:
+#    driver: local
+
+networks:
+  gol-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+#  mysql-master:
+#    container_name: mysql-master
+#    build: docker/mysql/master
+#    environment:
+#      - MYSQL_REPLICATION_USER=repl_user
+#      - MYSQL_REPLICATION_SLAVE_IP=172.20.0.102
+#    ports:
+#      - 33061:3306
+#    networks:
+#      gol-network:
+#        aliases:
+#          - mysql-master
+#        ipv4_address: 172.20.0.101
+#    volumes:
+#      - mysql_master_data:/var/lib/mysql
+#
+#  mysql-slave:
+#    container_name: mysql-slave
+#    build: docker/mysql/slave
+#    depends_on:
+#      - mysql-master
+#    environment:
+#      - MASTER_HOST=172.20.0.101
+#      - MASTER_PORT=3306
+#      - MASTER_USER=repl_user
+#    ports:
+#      - 33062:3306
+#    networks:
+#      gol-network:
+#        aliases:
+#          - mysql-slave
+#        ipv4_address: 172.20.0.102
+
+  php:
+    build: docker/php
+    working_dir: /var/www/
+    expose:
+      - 9000
+    networks:
+      gol-network:
+        aliases:
+          - php
+    volumes:
+      - .:/var/www
+
+  # container usage:
+  #  docker-compose run testing [php bin/console]
+  #  docker-compose run testing /var/www/vendor/bin/phpunit
+  testing:
+    build: docker/testing
+    working_dir: /var/www/
+    ports:
+      - 9090:9090
+    networks:
+      gol-network:
+        aliases:
+          - testing
+    volumes_from:
+      - php
+
+  apache:
+    build: docker/apache
+    working_dir: /var/www/
+    environment:
+      - APACHE_RUN_USER=www-data
+      - APACHE_RUN_GROUP=www-data
+      - APACHE_PID_FILE=/var/run/apache2/apache2.pid
+      - APACHE_RUN_DIR=/var/run/apache2
+      - APACHE_LOCK_DIR=/var/lock/apache2
+      - APACHE_LOG_DIR=/var/log/apache2
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      gol-network:
+        aliases:
+          - apache
+    volumes_from:
+      - php
+    tty: true
+
+  # container usage:
+  #  docker-compose run composer [command]
+  composer:
+    build: docker/composer
+    working_dir: /var/www/
+    networks:
+      gol-network:
+        aliases:
+          - composer
+    volumes_from:
+      - php
+    command: -q

@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  mysql-master:
+    environment:
+      - MYSQL_USER=database-user-name
+      - MYSQL_DATABASE=database-name
+      - MYSQL_ROOT_PASSWORD=root-secret-here
+      - MYSQL_PASSWORD=secret-here
+      - MYSQL_REPLICATION_PASSWORD=replication-secret-here
+  mysql-slave:
+    environment:
+      - MYSQL_ROOT_PASSWORD=root-secret-here
+      - MASTER_PASSWORD=replication-secret-here
+  apache:
+    environment:
+      - APP_DOMAIN=vhost-app-name
+      - APP_DOC_ROOT=/var/www/web
+      - APACHE_SERVERNAME=apache-servername
