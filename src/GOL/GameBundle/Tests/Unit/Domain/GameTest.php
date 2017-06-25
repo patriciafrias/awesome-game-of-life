@@ -18,11 +18,11 @@ class GameTest extends TestCase
     {
         $this->boardMock = $this->getMockBuilder(Board::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus'])
+            ->setMethods(['getStatus', 'populateBoard'])
             ->getMock();
     }
 
-    public function testStartGameShouldReturnAnEmptyBoard()
+    public function testInitializedGameShouldReturnAnEmptyBoard()
     {
         $this->boardMock->expects($this->once())
             ->method('getStatus')
@@ -31,5 +31,17 @@ class GameTest extends TestCase
         $game = new Game($this->boardMock);
 
         $this->assertEquals([['', '', '', ''], ['', '', '', ''], ['', '', '', '']], $game->getBoard()->getStatus());
+    }
+
+    public function testPopulateGameShouldReturnAnArrayFilled()
+    {
+        $this->boardMock->expects($this->once())
+            ->method('getStatus')
+            ->willReturn([['false', 'true', 'true', 'true'], ['true', 'true', 'true', 'true'], ['true', 'true', 'true', 'true']]);
+
+        $game = new Game($this->boardMock);
+        $game->populateBoard();
+
+        $this->assertEquals([['false', 'true', 'true', 'true'], ['true', 'true', 'true', 'true'], ['true', 'true', 'true', 'true']], $game->getBoard()->getStatus());
     }
 }

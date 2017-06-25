@@ -29,4 +29,16 @@ class Game
     {
         return $this->board;
     }
+
+    /**
+     * Fill each position of the board.
+     */
+    public function populateBoard()
+    {
+        for ($i = 0; $i < $this->board->getWidth(); $i++) {
+            for ($j = 0; $j < $this->board->getHeight(); $j++) {
+                $this->status[$i][$j] = (bool)rand(0, 1);
+            }
+        }
+    }
 }
