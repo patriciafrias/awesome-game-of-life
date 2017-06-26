@@ -32,15 +32,19 @@ class Game
 
     /**
      * Populate board first time.
+     * @param OrganismAbstract $organism
+     * @return array
      */
-    public function populateBoard()
+    public function populateBoard(OrganismAbstract $organism)
     {
         $gameStatus = $this->board->getStatus();
 
         for ($i = 0; $i < $this->board->getWidth(); $i++) {
             for ($j = 0; $j < $this->board->getHeight(); $j++) {
-                $positionStatus = (bool)rand(0, 1);
-                $gameStatus[$i][$j] = $positionStatus;
+                $element = $organism;
+                $elementStatus = (bool)rand(0, 1);
+                $element->setAlive($elementStatus);
+                $gameStatus[$i][$j] = $element;
             }
         }
 
@@ -51,14 +55,16 @@ class Game
 
     /**
      * Populate board in each life cycle.
+     * @param OrganismAbstract $organism
+     * @return array
      */
-    public function rePopulateBoard()
+    public function rePopulateBoard(OrganismAbstract $organism)
     {
         for ($i = 0; $i < $this->board->getWidth(); $i++) {
             for ($j = 0; $j < $this->board->getHeight(); $j++) {
 
                 // get status for the new life cycle.
-                $positionNextStatus = $this->getPositionNextStatus($i, $j);
+                $positionNextStatus = $this->getPositionNextStatus($i, $j, $organism);
 
                 $this->updatePositionStatus($i, $j, $positionNextStatus);
             }
@@ -91,12 +97,12 @@ class Game
      * @param $coordinateY
      * @return array|bool
      */
-    private function getPositionNextStatus($coordinateX, $coordinateY)
+    private function getPositionNextStatus($coordinateX, $coordinateY, $organism)
     {
-        $aliveNeighbors = $this->getAliveNeighbors($coordinateX, $coordinateY);
+        $aliveNeighbors = $this->getAliveNeighbors($coordinateX, $coordinateY, $organism);
 
         // there is no life in position
-        if (!$this->getLifeStatus($coordinateX, $coordinateY)) {
+        if (!$this->getLifeStatus($coordinateX, $coordinateY, $organism)) {
             // alive if 3 alive neighbors
             if ($aliveNeighbors == 3) {
                 return true;
@@ -116,12 +122,12 @@ class Game
     }
 
     /**
-     * Return alive neighbors for a given position.
+     * Return alive neighbors for a given element.
      * @param $coordinateX
      * @param $coordinateY
      * @return int
      */
-    private function getAliveNeighbors($coordinateX, $coordinateY)
+    private function getAliveNeighbors($coordinateX, $coordinateY, $organism)
     {
         $aliveNeighbors = 0;
         $aliveNeighborsArray = [];

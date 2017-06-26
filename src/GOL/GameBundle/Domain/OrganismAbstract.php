@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace GOL\GameBundle\Domain;
 
 /**
- * Class Cell
+ * Class Organism
  * @package GOL\GameBundle\Domain
  */
-class Cell
+abstract class OrganismAbstract
 {
     /** @var bool */
-    private $alive = false;
+    protected $alive = false;
 
     /**
      * @return bool
@@ -23,9 +23,9 @@ class Cell
 
     /**
      * @param bool $alive
-     * @return Cell
+     * @return OrganismAbstract
      */
-    public function setAlive(bool $alive): Cell
+    public function setAlive(bool $alive): OrganismAbstract
     {
         $this->alive = $alive;
         return $this;

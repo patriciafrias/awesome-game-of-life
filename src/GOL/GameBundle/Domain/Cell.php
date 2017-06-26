@@ -8,27 +8,26 @@ namespace GOL\GameBundle\Domain;
  * Class Cell
  * @package GOL\GameBundle\Domain
  */
-class Cell
+class Cell extends OrganismAbstract
 {
-    /** @var bool */
-    private $alive = false;
+    /** @var string */
+    private $color = 'green';
 
     /**
-     * @return bool
+     * @return string
      */
-    public function isAlive(): bool
+    public function getColor(): string
     {
-        return $this->alive;
+        return $this->color;
     }
 
     /**
-     * @param bool $alive
+     * @param string $color
      * @return Cell
      */
-    public function setAlive(bool $alive): Cell
+    public function setColor(string $color): Cell
     {
-        $this->alive = $alive;
+        $this->color = $color;
         return $this;
     }
-
 }

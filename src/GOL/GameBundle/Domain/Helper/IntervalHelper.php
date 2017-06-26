@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace GOL\GameBundle\Domain\Helper;
 
-class LifeIntervalHelper
+/**
+ * Class IntervalHelper
+ * @package GOL\GameBundle\Domain\Helper
+ */
+class IntervalHelper
 {
     /**
      * Set interval for a given function.
-     * @param null $func
+     * @param null $function
      * @param int $interval
      * @param int $times
      */
-    function setLifeInterval($func = null, $interval = 0, $times = 0)
+    function setInterval($function = null, $interval = 0, $times = 0)
     {
-        if (($func == null) || (!function_exists($func))) {
+        if (($function == null) || (!function_exists($function))) {
             throw new Exception('Invalid function.');
         }
 
@@ -24,13 +28,13 @@ class LifeIntervalHelper
         if ($times > 0) {
             $i = 0;
             while ($i < $times) {
-                call_user_func($func);
+                call_user_func($function);
                 $i++;
                 usleep($seconds);
             }
         } else {
             while (true) {
-                call_user_func($func); // Call a defined function.
+                call_user_func($function); // Call a defined function.
                 usleep($seconds);
             }
         }
