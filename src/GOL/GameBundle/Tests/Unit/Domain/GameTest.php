@@ -76,11 +76,21 @@ class GameTest extends TestCase
 
         $game = new Game($this->boardMock);
 
-        $game->populateBoard($this->cellMock);
+        // Cell array to pass to the game based on its board dimensions.
+        $cellsArray = [];
+        foreach (count($game->getBoard()->getStatus()) as $row) {
+            foreach ($row as $column) {
+                $cellsArray[$row][$column] = $this->cellMock;
+            }
+        }
 
-        $game->rePopulateBoard($this->cellMock);
+        // pass cells to populate the board (first life cycle)
+        $game->populateBoard($cellsArray);
 
-        $el00 = $game->getBoard()->getStatus()[0][0]->isAlive(true);
+        // pass cells to populate the board (any life cycle)
+        $game->rePopulateBoard($game->getBoard()->getStatus());
+
+//        $el00 = $game->getBoard()->getStatus()[0][0]->isAlive(true);
 
         // 0,0 position has 3 alive neighbors therefore should be alive
         $this->assertEquals(true, $game->getBoard()->getStatus()[0][1]->isAlive());

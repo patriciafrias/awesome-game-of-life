@@ -32,16 +32,16 @@ class Game
 
     /**
      * Populate board first time.
-     * @param OrganismAbstract $organism
+     * @param array $elements
      * @return array
      */
-    public function populateBoard(OrganismAbstract $organism)
+    public function populateBoard(Array $elements)
     {
         $gameStatus = $this->board->getStatus();
 
         for ($i = 0; $i < $this->board->getWidth(); $i++) {
             for ($j = 0; $j < $this->board->getHeight(); $j++) {
-                $element = $organism;
+                $element = $elements[$i][$j];
                 $elementStatus = (bool)rand(0, 1);
                 $element->setAlive($elementStatus);
                 $gameStatus[$i][$j] = $element;
@@ -55,18 +55,18 @@ class Game
 
     /**
      * Populate board in each life cycle.
-     * @param OrganismAbstract $organism
+     * @param array $elements
      * @return array
      */
-    public function rePopulateBoard(OrganismAbstract $organism)
+    public function rePopulateBoard(Array $elements)
     {
         for ($i = 0; $i < $this->board->getWidth(); $i++) {
             for ($j = 0; $j < $this->board->getHeight(); $j++) {
 
                 // get status for the new life cycle.
-                $positionNextStatus = $this->getPositionNextStatus($i, $j, $organism);
+                $positionNextStatus = $this->getPositionNextStatus($i, $j, $elements[$i][$j]);
 
-                $this->updatePositionStatus($i, $j, $positionNextStatus);
+                $this->updatePositionStatus($i, $j, $positionNextStatus, $elements[$i][$j]);
             }
         }
 
