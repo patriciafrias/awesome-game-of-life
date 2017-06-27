@@ -32,19 +32,23 @@ class Game
 
     /**
      * Populate board first time.
-     * @param array $elements
+     * @param array $organisms
      * @return array
      */
-    public function populateBoard(Array $elements)
+    public function populateBoard(array $organisms)
     {
         $gameStatus = $this->board->getStatus();
+        $boardWidth = count($gameStatus);
+        $boardHeight = count($gameStatus[0]);
 
-        for ($i = 0; $i < $this->board->getWidth(); $i++) {
-            for ($j = 0; $j < $this->board->getHeight(); $j++) {
-                $element = $elements[$i][$j];
+        for ($i = 0; $i < $boardWidth; $i++) {
+            for ($j = 0; $j < $boardHeight; $j++) {
+
+                // set element into a position
+                $organism = $organisms[$i][$j];
                 $elementStatus = (bool)rand(0, 1);
-                $element->setAlive($elementStatus);
-                $gameStatus[$i][$j] = $element;
+                $organism->setAlive($elementStatus);
+                $gameStatus[$i][$j] = $organism;
             }
         }
 
@@ -55,18 +59,21 @@ class Game
 
     /**
      * Populate board in each life cycle.
-     * @param array $elements
      * @return array
      */
-    public function rePopulateBoard(Array $elements)
+    public function rePopulateBoard()
     {
-        for ($i = 0; $i < $this->board->getWidth(); $i++) {
-            for ($j = 0; $j < $this->board->getHeight(); $j++) {
+        $gameStatus = $this->board->getStatus();
+        $boardWidth = count($gameStatus);
+        $boardHeight = count($gameStatus[0]);
+
+        for ($i = 0; $i < $boardWidth; $i++) {
+            for ($j = 0; $j < $boardHeight; $j++) {
 
                 // get status for the new life cycle.
-                $positionNextStatus = $this->getPositionNextStatus($i, $j, $elements[$i][$j]);
+                $positionNextStatus = $this->getPositionNextStatus($i, $j);
 
-                $this->updatePositionStatus($i, $j, $positionNextStatus, $elements[$i][$j]);
+                $this->updatePositionStatus($i, $j, $positionNextStatus);
             }
         }
 
@@ -97,12 +104,12 @@ class Game
      * @param $coordinateY
      * @return array|bool
      */
-    private function getPositionNextStatus($coordinateX, $coordinateY, $organism)
+    private function getPositionNextStatus($coordinateX, $coordinateY)
     {
-        $aliveNeighbors = $this->getAliveNeighbors($coordinateX, $coordinateY, $organism);
+        $aliveNeighbors = $this->getAliveNeighbors($coordinateX, $coordinateY);
 
         // there is no life in position
-        if (!$this->getLifeStatus($coordinateX, $coordinateY, $organism)) {
+        if (!$this->getLifeStatus($coordinateX, $coordinateY)) {
             // alive if 3 alive neighbors
             if ($aliveNeighbors == 3) {
                 return true;
@@ -122,24 +129,32 @@ class Game
     }
 
     /**
-     * Return alive neighbors for a given element.
+     * Return the number of alive neighbors for a given element.
      * @param $coordinateX
      * @param $coordinateY
+     * @param array $organisms|Cell
      * @return int
      */
-    private function getAliveNeighbors($coordinateX, $coordinateY, $organism)
+    private function getAliveNeighbors($coordinateX, $coordinateY)
     {
+        $gameStatus = $this->board->getStatus();
+        $boardWidth = count($gameStatus);
+        $boardHeight = count($gameStatus[0]);
+
         $aliveNeighbors = 0;
         $aliveNeighborsArray = [];
 
-        for ($x = max(0, $coordinateX - 1); $x <= min($coordinateX + 1, $this->board->getWidth() -1); $x++) {
-            for ($y = max(0, $coordinateY - 1); $y <= min($coordinateY + 1, $this->board->getHeight() -1); $y++) {
+        for ($x = max(0, $coordinateX - 1); $x <= min($coordinateX + 1, $boardWidth -1); $x++) {
+            for ($y = max(0, $coordinateY - 1); $y <= min($coordinateY + 1, $boardHeight -1); $y++) {
 
                 // exclude current position of neighbors counter
                 if ($x != $coordinateX || $y != $coordinateY) {
 
                     // check alive neighbors
-                    if ($this->board->getStatus()[$x][$y] == true) {
+//                    if ($this->board->getStatus()[$x][$y] == true) {
+                    /** @var Cell */
+                    $organism = $this->board->getStatus()[$x][$y];
+                    if ($organism->isAlive()) {
                         $aliveNeighbors++;
                         $aliveNeighborsArray[] = "[$x,$y]";
                     }

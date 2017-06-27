@@ -22,7 +22,7 @@ class GameTest extends TestCase
     {
         $this->boardMock = $this->getMockBuilder(Board::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStatus', 'populateBoard', 'rePopulateBoard'])
+            ->setMethods(['getStatus', 'setStatus', 'populateBoard', 'rePopulateBoard'])
             ->getMock();
 
         $this->cellMock = $this->getMockBuilder(Cell::class)
@@ -44,7 +44,7 @@ class GameTest extends TestCase
 
     public function testPopulateGameBoardShouldReturnAnArrayWithFilledPositions()
     {
-        $this->boardMock->expects($this->exactly(3))
+        $this->boardMock->expects($this->atLeastOnce())
             ->method('getStatus')
             ->willReturn([
                 [$this->cellMock, $this->cellMock, $this->cellMock, $this->cellMock],
@@ -54,7 +54,15 @@ class GameTest extends TestCase
 
         $game = new Game($this->boardMock);
 
-        $game->populateBoard($this->cellMock);
+        // Cell array to pass to the game based on its board dimensions.
+        $cellsArray = [];
+        foreach ($game->getBoard()->getStatus() as $rowKey => $row) {
+            foreach ($row as $columnKey => $column) {
+                $cellsArray[$rowKey][$columnKey] = $this->cellMock;
+            }
+        }
+
+        $game->populateBoard($cellsArray);
 
         $this->assertEquals([
             [$this->cellMock, $this->cellMock, $this->cellMock, $this->cellMock],
@@ -66,7 +74,11 @@ class GameTest extends TestCase
 
     public function testRePopulateGameBoardShouldReturnAnArrayWithModifiedPositions()
     {
-        $this->boardMock->expects($this->exactly(5))
+        $this->cellMock->expects($this->atLeastOnce())
+            ->method('isAlive', 'setAlive')
+            ->willReturn(true);
+
+        $this->boardMock->expects($this->atLeastOnce())
             ->method('getStatus')
             ->willReturn([
                 [$this->cellMock, $this->cellMock, $this->cellMock],
@@ -78,21 +90,18 @@ class GameTest extends TestCase
 
         // Cell array to pass to the game based on its board dimensions.
         $cellsArray = [];
-        foreach (count($game->getBoard()->getStatus()) as $row) {
-            foreach ($row as $column) {
-                $cellsArray[$row][$column] = $this->cellMock;
+        foreach ($game->getBoard()->getStatus() as $rowKey => $row) {
+            foreach ($row as $columnKey => $column) {
+                $cellsArray[$rowKey][$columnKey] = $this->cellMock;
             }
         }
 
         // pass cells to populate the board (first life cycle)
         $game->populateBoard($cellsArray);
 
-        // pass cells to populate the board (any life cycle)
-        $game->rePopulateBoard($game->getBoard()->getStatus());
-
-//        $el00 = $game->getBoard()->getStatus()[0][0]->isAlive(true);
+        $game->rePopulateBoard();
 
         // 0,0 position has 3 alive neighbors therefore should be alive
-        $this->assertEquals(true, $game->getBoard()->getStatus()[0][1]->isAlive());
+        $this->assertSame(true, $game->getBoard()->getStatus()[0][1]->isAlive());
     }
 }
