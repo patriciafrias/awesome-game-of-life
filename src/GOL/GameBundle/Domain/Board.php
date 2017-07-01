@@ -21,6 +21,7 @@ class Board
 
     /**
      * Board constructor.
+     *
      * @param int $gridWidth
      * @param int $gridHeight
      */
@@ -37,9 +38,9 @@ class Board
      */
     public function initialize()
     {
-        for ($x=0; $x<$this->width; $x++) {
+        for ($x = 0; $x < $this->width; $x++) {
             $this->status[] = [];
-            for ($y=0; $y<$this->height; $y++) {
+            for ($y = 0; $y < $this->height; $y++) {
                 $this->status[$x][$y] = '';
             }
         }
@@ -63,4 +64,19 @@ class Board
         return $this;
     }
 
+    /**
+     * @return int
+     */
+    public function getHeight(): int
+    {
+        return $this->height;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth(): int
+    {
+        return $this->width;
+    }
 }
