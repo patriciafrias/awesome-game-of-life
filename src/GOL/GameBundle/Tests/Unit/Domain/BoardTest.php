@@ -32,5 +32,4 @@ class BoardTest extends TestCase
             [64, 64, 64],
         ];
     }
-
 }
