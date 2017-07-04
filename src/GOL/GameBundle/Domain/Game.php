@@ -23,26 +23,41 @@ class Game
     }
 
     /**
-     * Game board getter.
+     * Populate each Board element.
      *
-     * @return Board|null
+     * @return array
      */
-    public function getBoard()
+    public function populateBoard()
     {
-        return $this->board;
+        $gameStatus = $this->board->getStatus();
+
+        // Add a boolean value to each element.
+        for ($i = 0; $i < $this->board->getWidth(); $i++) {
+            for ($j = 0; $j < $this->board->getHeight(); $j++) {
+                $gameStatus[$i][$j] = (bool)rand(0, 1);
+            }
+        }
+
+        $this->board->setStatus($gameStatus);
+
+        return $this->board->getStatus();
     }
 
-    /**
-     *Game board setter.
-     *
-     * @param Board|null $board
-     *
-     * @return Game
-     */
-    public function setBoard($board)
+    public function calculateNextLifeCycle()
     {
-        $this->board = $board;
-        return $this;
+        $newGameStatus = [];
+
+        // Walk through gameStatus.
+        for ($i = 0; $i < $this->board->getWidth(); $i++) {
+            for ($j = 0; $j < $this->board->getHeight(); $j++) {
+
+                // Update element status (1||0)
+                $elementNewStatus = $this->getNextIterationElementStatus($i, $j);
+                $newGameStatus[$i][$j] = $elementNewStatus;
+            }
+        }
+
+        $this->board->setStatus($newGameStatus);
     }
 
     /**
@@ -56,17 +71,16 @@ class Game
     private function getAliveNeighbors($coordX, $coordY)
     {
         $gameStatus = $this->board->getStatus();
+
         $aliveNeighbors = 0;
-        $aliveNeighborsArray = [];
 
         for ($x = max(0, $coordX - 1); $x <= min($coordX + 1, $this->board->getWidth() - 1); $x++) {
             for ($y = max(0, $coordY - 1); $y <= min($coordY + 1, $this->board->getHeight() - 1); $y++) {
-                // exclude current position of neighbors counter
+                // Exclude current position of neighbors counter
                 if ($x != $coordX || $y != $coordY) {
-                    // check alive neighbors
+                    // Check alive neighbors
                     if ($gameStatus[$x][$y]) {
                         $aliveNeighbors++;
-                        $aliveNeighborsArray[] = "[$x,$y]";
                     }
                 }
             }
@@ -83,70 +97,41 @@ class Game
      *
      * @return int|null
      */
-    private function setElementNextStatus($coordX, $coordY)
+    private function getNextIterationElementStatus($coordX, $coordY)
     {
         $gameStatus = $this->board->getStatus();
-        $aliveNeighbors = $this->getAliveNeighbors($coordX, $coordY);
-        $elementCurrentStatus = $gameStatus[$coordX][$coordY];
-        $elementNewStatus = null;
 
-        // if element isn't alive
-        if (!$elementCurrentStatus) {
-            if ($aliveNeighbors === 3) {
-                // alive is true (nace)
-                $elementNewStatus = 1;
-            } else {
-                // alive is false (keep died)
-                $elementNewStatus = 0;
-            }
+        $isElementAlive = $gameStatus[$coordX][$coordY];
+        $elementAliveNeighbors = $this->getAliveNeighbors($coordX, $coordY);
+
+        $lifeKeepingNeighborsNumber = in_array($elementAliveNeighbors, [2, 3]);
+        $rebirthNeighborsNumber = $elementAliveNeighbors === 3;
+
+        if (($isElementAlive && $lifeKeepingNeighborsNumber) || (!$isElementAlive && $rebirthNeighborsNumber)) {
+            $isElementAlive = 1;
         } else {
-            if ($aliveNeighbors < 2 || $aliveNeighbors > 3) {
-                // alive is false
-                $elementNewStatus = 0;
-            } else {
-                // alive is true
-                $elementNewStatus = 1;
-            }
+            $isElementAlive = 0;
         }
 
-        return $elementNewStatus;
+        return $isElementAlive;
     }
 
     /**
-     * Populate each Board element.
-     *
-     * @return array
+     * @return Board|null
      */
-    public function populateBoard()
+    public function getBoard()
     {
-        $gameStatus = $this->board->getStatus();
-
-        // add a boolean value to each element.
-        for ($i = 0; $i < $this->board->getWidth(); $i++) {
-            for ($j = 0; $j < $this->board->getHeight(); $j++) {
-                $gameStatus[$i][$j] = (bool)rand(0, 1);
-            }
-        }
-
-        $this->board->setStatus($gameStatus);
-
-        return $this->board->getStatus();
+        return $this->board;
     }
 
-    public function generateCycle()
+    /**
+     * @param Board|null $board
+     *
+     * @return Game
+     */
+    public function setBoard($board)
     {
-        $newGameStatus = [];
-
-        // walk through gameStatus.
-        for ($i = 0; $i < $this->board->getWidth(); $i++) {
-            for ($j = 0; $j < $this->board->getHeight(); $j++) {
-
-                // update element status (alive true or false)
-                $elementNewStatus = $this->setElementNextStatus($i, $j);
-                $newGameStatus[$i][$j] = $elementNewStatus;
-            }
-        }
-
-        $this->board->setStatus($newGameStatus);
+        $this->board = $board;
+        return $this;
     }
 }

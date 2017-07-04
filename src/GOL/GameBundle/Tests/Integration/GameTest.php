@@ -64,7 +64,7 @@ class GameTest extends TestCase
 
         $game->getBoard()->setStatus($modifiedBoard);
 
-        $game->generateCycle();
+        $game->calculateNextLifeCycle();
 
         // position 0,0 isn't alive and has exactly 3 alive neighbors, therefore should become alive.
         $this->assertSame(1, $game->getBoard()->getStatus()[0][0]);
@@ -86,7 +86,7 @@ class GameTest extends TestCase
 
         $game->getBoard()->setStatus($modifiedBoard);
 
-        $game->generateCycle();
+        $game->calculateNextLifeCycle();
 
         // position 1,1 is alive and has less than 1 alive neighbors, therefore should become not alive.
         $this->assertSame(0, $game->getBoard()->getStatus()[1][1]);
@@ -108,7 +108,7 @@ class GameTest extends TestCase
 
         $game->getBoard()->setStatus($modifiedBoard);
 
-        $game->generateCycle();
+        $game->calculateNextLifeCycle();
 
         // position 1,1 is alive and has more than 3 alive neighbors, therefore should become not alive.
         $this->assertSame(0, $game->getBoard()->getStatus()[1][1]);
@@ -130,7 +130,7 @@ class GameTest extends TestCase
 
         $game->getBoard()->setStatus($modifiedBoard);
 
-        $game->generateCycle();
+        $game->calculateNextLifeCycle();
 
         // position 0,0 is alive and has exactly 2 alive neighbors, therefore should be alive.
         $this->assertSame(1, $game->getBoard()->getStatus()[0][0]);
@@ -152,7 +152,7 @@ class GameTest extends TestCase
 
         $game->getBoard()->setStatus($modifiedBoard);
 
-        $game->generateCycle();
+        $game->calculateNextLifeCycle();
 
         // position 0,0 is alive and has exactly 3 alive neighbors, therefore should be alive.
         $this->assertSame(1, $game->getBoard()->getStatus()[0][0]);
@@ -174,7 +174,7 @@ class GameTest extends TestCase
 
         $game->getBoard()->setStatus($modifiedBoard);
 
-        $game->generateCycle();
+        $game->calculateNextLifeCycle();
 
         // position 0,0 isn't alive and has less than 3 alive neighbors, therefore should be no alive.
         $this->assertSame(0, $game->getBoard()->getStatus()[0][0]);
