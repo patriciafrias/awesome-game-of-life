@@ -7,6 +7,10 @@ namespace GOL\GameBundle\Test\Unit\Domain;
 use GOL\GameBundle\Domain\Board;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class BoardTest
+ * @package GOL\GameBundle\Test\Unit\Domain
+ */
 class BoardTest extends TestCase
 {
     /**
