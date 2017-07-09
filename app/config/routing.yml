@@ -1,7 +1,7 @@
-gol_api:
-    resource: "@GOLApiBundle/Resources/config/routing.yml"
+gol_client:
+    resource: "@GOLClientBundle/Resources/config/routing.yml"
     prefix:   /
 
-gol_game:
-    resource: "@GOLGameBundle/Resources/config/routing.yml"
-    prefix:   /
+gol_api:
+    resource: "@GOLApiBundle/Resources/config/routing.yml"
+    prefix:   /api/v1/

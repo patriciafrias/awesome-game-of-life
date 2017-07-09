@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new GOL\GameBundle\GOLGameBundle(),
             new GOL\ApiBundle\GOLApiBundle(),
+            new GOL\ClientBundle\GOLClientBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

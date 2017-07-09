@@ -1,0 +1,4 @@
+services:
+#    gol_client.example:
+#        class: GOL\ClientBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
