@@ -1,0 +1,4 @@
+services:
+#    gol_api.example:
+#        class: GOL\ApiBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]
