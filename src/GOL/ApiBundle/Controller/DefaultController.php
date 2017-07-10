@@ -13,6 +13,7 @@ class DefaultController extends FOSRestController
 {
     /**
      * Start game
+     *
      * @Rest\Get("/start-game")
      */
     public function startGameAction(Request $request)
@@ -29,12 +30,41 @@ class DefaultController extends FOSRestController
         return $this->view($data, Response::HTTP_OK);
     }
 
-//    /**
-//     * Populate game
-//     * @Rest\Get("/populate-game")
-//     */
-//    public function populateGameAction(Request $request)
-//    {
-//
-//    }
+    /**
+     * Populate game
+     *
+     * @Rest\Get("/populate-game")
+     */
+    public function populateGameAction(Request $request)
+    {
+        $board = new Board(3, 3);
+
+        $game = new Game($board);
+
+        $data = [
+            'status' => 'OK',
+            'data' => $game->populateBoard(),
+        ];
+
+        return $this->view($data, Response::HTTP_OK);
+    }
+
+    /**
+     * Calculate next Life cycle
+     *
+     * @Rest\Get("/calculate-next-cycle")
+     */
+    public function calculateNextCycleAction(Request $request)
+    {
+        $board = new Board(3, 3);
+
+        $game = new Game($board);
+
+        $data = [
+            'status' => 'OK',
+            'data' => $game->calculateNextLifeCycle(),
+        ];
+
+        return $this->view($data, Response::HTTP_OK);
+    }
 }
