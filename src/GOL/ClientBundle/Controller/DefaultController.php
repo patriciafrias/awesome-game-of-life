@@ -2,14 +2,14 @@
 
 namespace GOL\ClientBundle\Controller;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
     /** @var string */
-    private $baseUrl= 'http://gol.local.com/app_dev.php';
+    private $baseUrl = 'http://apache/app_dev.php/';
 
     /**
      * Start game by default
@@ -21,12 +21,13 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
 
-        $client = new Client($this->baseUrl);
+        $client = new Client([
+            'base_uri' => $this->baseUrl,
+            'timeout'  => 2.0,
+        ]);
 
-        $content = $client->get('/api/v1/start-game')
-            ->send()
-            ->getBody();
+        $response = $client->request('GET', 'api/v1/start-game');
 
-        return $this->render('GOLClientBundle:Default:index.html.twig', ['content' => $content]);
+        return $this->render('GOLClientBundle:Default:index.html.twig', ['content' => $response->getBody()]);
     }
 }
