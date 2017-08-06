@@ -34,7 +34,7 @@ class Game
         // Add a boolean value to each element.
         for ($i = 0; $i < $this->board->getWidth(); $i++) {
             for ($j = 0; $j < $this->board->getHeight(); $j++) {
-                $gameStatus[$i][$j] = (bool)rand(0, 1);
+                $gameStatus[$i][$j] = rand(0, 1);
             }
         }
 

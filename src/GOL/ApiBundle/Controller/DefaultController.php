@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class DefaultController extends FOSRestController
 {
     /**
-     * Start game
+     * Start game with an empty board.
      *
      * @Rest\Get("/start-game")
      */
@@ -31,7 +31,7 @@ class DefaultController extends FOSRestController
     }
 
     /**
-     * Populate game
+     * Populate game with random value in each position of the board.
      *
      * @Rest\Get("/populate-game")
      */
@@ -41,9 +41,17 @@ class DefaultController extends FOSRestController
 
         $game = new Game($board);
 
+        $session = $request->getSession();
+
+        $game->populateBoard();
+
+        $newStatus = $game->getBoard();
+
+        $session->set('board', $newStatus);
+
         $data = [
             'status' => 'OK',
-            'data' => $game->populateBoard(),
+            'data' => $newStatus->getStatus(),
         ];
 
         return $this->view($data, Response::HTTP_OK);
@@ -56,13 +64,18 @@ class DefaultController extends FOSRestController
      */
     public function calculateNextCycleAction(Request $request)
     {
-        $board = new Board(3, 3);
+        $session = $request->getSession();
+        $board = $session->get('board');
 
         $game = new Game($board);
 
+        $game->calculateNextLifeCycle();
+
+        $newBoard = $game->getBoard()->getStatus();
+
         $data = [
             'status' => 'OK',
-            'data' => $game->calculateNextLifeCycle(),
+            'data' => $newBoard,
         ];
 
         return $this->view($data, Response::HTTP_OK);
