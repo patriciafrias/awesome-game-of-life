@@ -18,7 +18,7 @@ class DefaultController extends FOSRestController
      */
     public function startGameAction(Request $request)
     {
-        $board = new Board(3, 3);
+        $board = new Board(40, 60);
 
         $game = new Game($board);
 
@@ -37,7 +37,7 @@ class DefaultController extends FOSRestController
      */
     public function populateGameAction(Request $request)
     {
-        $board = new Board(3, 3);
+        $board = new Board(40, 60);
 
         $game = new Game($board);
 

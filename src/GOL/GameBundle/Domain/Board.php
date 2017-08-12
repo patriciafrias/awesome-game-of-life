@@ -27,8 +27,8 @@ class Board
      */
     public function __construct(int $gridWidth, int $gridHeight)
     {
-        $this->height = $gridHeight;
         $this->width = $gridWidth;
+        $this->height = $gridHeight;
 
         $this->initialize();
     }

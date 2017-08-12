@@ -105,3 +105,10 @@ fos_rest:
             json: true
         templating_formats:
             html: true
+
+# Assetic Configuration
+assetic:
+    debug:  '%kernel.debug%'
+    use_controller: '%kernel.debug%'
+    filters:
+        cssrewrite: ~
