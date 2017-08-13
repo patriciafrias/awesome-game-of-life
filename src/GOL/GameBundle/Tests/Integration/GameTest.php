@@ -4,6 +4,8 @@ namespace GOL\GameBundle\Test\Integration\Domain;
 
 use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
+use GOL\GameBundle\Domain\PopulateFiftyPercent;
+use GOL\GameBundle\Domain\PopulateStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +18,10 @@ class GameTest extends TestCase
     {
         $board = new Board(3, 3);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $expected = [
             ['', '', ''],
@@ -31,14 +36,17 @@ class GameTest extends TestCase
     {
         $board = new Board(3, 3);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $game->populateBoard();
 
         $emptyValues = 0;
 
-        for ($i = 0; $i < $game->getBoard()->getWidth(); $i++) {
-            for ($j = 0; $j < $game->getBoard()->getHeight(); $j++) {
+        for ($i = 0; $i < $game->getBoard()->getRows(); $i++) {
+            for ($j = 0; $j < $game->getBoard()->getColumns(); $j++) {
                 if ($game->getBoard()->getStatus()[$i][$j] === '') {
                     $emptyValues++;
                 }
@@ -52,7 +60,10 @@ class GameTest extends TestCase
     {
         $board = new Board(5, 6);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $modifiedBoard = [
             [0, 1, 0, 0, 1, 0],
@@ -74,7 +85,10 @@ class GameTest extends TestCase
     {
         $board = new Board(5, 6);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $modifiedBoard = [
             [0, 1, 0, 0, 1, 0],
@@ -96,7 +110,10 @@ class GameTest extends TestCase
     {
         $board = new Board(5, 6);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $modifiedBoard = [
             [1, 1, 1, 0, 1, 0],
@@ -118,7 +135,10 @@ class GameTest extends TestCase
     {
         $board = new Board(5, 6);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $modifiedBoard = [
             [1, 1, 0, 0, 1, 0],
@@ -140,7 +160,10 @@ class GameTest extends TestCase
     {
         $board = new Board(5, 6);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $modifiedBoard = [
             [1, 1, 0, 0, 1, 0],
@@ -162,7 +185,10 @@ class GameTest extends TestCase
     {
         $board = new Board(5, 6);
 
-        $game = new Game($board);
+        /** @var PopulateStrategyInterface $populateStrategy */
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $modifiedBoard = [
             [0, 1, 0, 0, 1, 0],

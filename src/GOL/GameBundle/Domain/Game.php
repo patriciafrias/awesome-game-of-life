@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace GOL\GameBundle\Domain;
@@ -12,14 +13,19 @@ class Game
     /** @var Board|null */
     private $board = null;
 
+    /** @var  PopulateStrategyInterface */
+    private $populateStrategy;
+
     /**
      * Game constructor.
      *
      * @param Board $board
+     * @param PopulateStrategyInterface $populateStrategy
      */
-    public function __construct(Board $board)
+    public function __construct(Board $board, PopulateStrategyInterface $populateStrategy)
     {
         $this->board = $board;
+        $this->populateStrategy = $populateStrategy;
     }
 
     /**
@@ -31,14 +37,7 @@ class Game
     {
         $gameStatus = $this->board->getStatus();
 
-        // Add a boolean value to each element.
-        for ($i = 0; $i < $this->board->getWidth(); $i++) {
-            for ($j = 0; $j < $this->board->getHeight(); $j++) {
-                $gameStatus[$i][$j] = rand(0, 1);
-            }
-        }
-
-        $this->board->setStatus($gameStatus);
+        $this->board->setStatus($this->populateStrategy->populate($gameStatus));
 
         return $this->board->getStatus();
     }
@@ -48,8 +47,8 @@ class Game
         $newGameStatus = [];
 
         // Walk through gameStatus.
-        for ($i = 0; $i < $this->board->getWidth(); $i++) {
-            for ($j = 0; $j < $this->board->getHeight(); $j++) {
+        for ($i = 0; $i < $this->board->getRows(); $i++) {
+            for ($j = 0; $j < $this->board->getColumns(); $j++) {
 
                 // Update element status (1||0)
                 $elementNewStatus = $this->getNextIterationElementStatus($i, $j);
@@ -74,12 +73,12 @@ class Game
 
         $aliveNeighbors = 0;
 
-        for ($x = max(0, $coordX - 1); $x <= min($coordX + 1, $this->board->getWidth() - 1); $x++) {
-            for ($y = max(0, $coordY - 1); $y <= min($coordY + 1, $this->board->getHeight() - 1); $y++) {
+        for ($i = max(0, $coordX - 1); $i <= min($coordX + 1, $this->board->getRows() - 1); $i++) {
+            for ($j = max(0, $coordY - 1); $j <= min($coordY + 1, $this->board->getColumns() - 1); $j++) {
                 // Exclude current position of neighbors counter
-                if ($x != $coordX || $y != $coordY) {
+                if ($i != $coordX || $j != $coordY) {
                     // Check alive neighbors
-                    if ($gameStatus[$x][$y]) {
+                    if ($gameStatus[$i][$j]) {
                         $aliveNeighbors++;
                     }
                 }
