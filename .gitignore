@@ -8,6 +8,9 @@
 !/var/cache
 /var/cache/*
 !var/cache/.gitkeep
+!/var/cov
+/var/cov/*
+!var/cov/.gitkeep
 !/var/logs
 /var/logs/*
 !var/logs/.gitkeep
