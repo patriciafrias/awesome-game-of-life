@@ -11,10 +11,10 @@ namespace GOL\GameBundle\Domain;
 class Board
 {
     /** @var int */
-    private $height = 0;
+    private $columns = 0;
 
     /** @var int */
-    private $width = 0;
+    private $rows = 0;
 
     /** @var array */
     private $status = [];
@@ -22,13 +22,13 @@ class Board
     /**
      * Board constructor.
      *
-     * @param int $gridWidth
-     * @param int $gridHeight
+     * @param int $rows
+     * @param int $columns
      */
-    public function __construct(int $gridWidth, int $gridHeight)
+    public function __construct(int $rows, int $columns)
     {
-        $this->width = $gridWidth;
-        $this->height = $gridHeight;
+        $this->rows = $rows;
+        $this->columns = $columns;
 
         $this->initialize();
     }
@@ -38,10 +38,10 @@ class Board
      */
     protected function initialize()
     {
-        for ($x = 0; $x < $this->width; $x++) {
-            $this->status[$x] = [];
-            for ($y = 0; $y < $this->height; $y++) {
-                $this->status[$x][$y] = '';
+        for ($i = 0; $i < $this->rows; $i++) {
+            $this->status[$i] = [];
+            for ($j = 0; $j < $this->columns; $j++) {
+                $this->status[$i][$j] = '';
             }
         }
     }
@@ -67,16 +67,16 @@ class Board
     /**
      * @return int
      */
-    public function getHeight(): int
+    public function getColumns(): int
     {
-        return $this->height;
+        return $this->columns;
     }
 
     /**
      * @return int
      */
-    public function getWidth(): int
+    public function getRows(): int
     {
-        return $this->width;
+        return $this->rows;
     }
 }

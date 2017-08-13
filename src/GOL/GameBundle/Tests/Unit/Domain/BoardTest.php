@@ -14,26 +14,26 @@ use PHPUnit\Framework\TestCase;
 class BoardTest extends TestCase
 {
     /**
-     * @dataProvider boardInitProvider
+     * @dataProvider boardConstructorProvider
      */
-    public function testJustInitializedBoardShouldReturnAnArrayWithoutLiveCells($width, $height, $expected)
+    public function testBoardConstructor($rows, $columns, $expected)
     {
-        $board = new Board($width, $height);
+        $board = new Board($rows, $columns);
 
-        $this->assertEquals(
-            $expected,
-            count($board->getStatus())
-        );
+        $notEmptyElements = array_filter($board->getStatus(), function ($position) {
+            return !in_array("", $position);
+        });
+
+        $this->assertEquals($expected, count($notEmptyElements));
     }
 
-    public function boardInitProvider()
+    public function boardConstructorProvider()
     {
         return [
-            [4, 4, 4],
-            [8, 8, 8],
-            [16, 16, 16],
-            [32, 32, 32],
-            [64, 64, 64],
+            'New Board 3x4 should return an array with empty values'    => [3, 4, 0],
+            'New Board 4x6 should return an array with empty values'    => [4, 6, 0],
+            'New Board 12x8 should return an array with empty values'   => [12, 8, 0],
+            'New Board 50x30 should return an array with empty values'  => [50, 30, 0],
         ];
     }
 }
