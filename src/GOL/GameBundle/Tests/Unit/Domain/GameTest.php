@@ -24,6 +24,9 @@ class GameTest extends TestCase
             ->getMock();
     }
 
+    /**
+     * @covers Game::getBoard
+     */
     public function testInitializedGameShouldReturnAnEmptyBoard()
     {
         $this->boardMock->expects($this->once())
@@ -35,6 +38,9 @@ class GameTest extends TestCase
         $this->assertEquals([['', '', '', ''], ['', '', '', ''], ['', '', '', '']], $game->getBoard()->getStatus());
     }
 
+    /**
+     * @covers Game::populateBoard
+     */
     public function testPopulateGameBoardShouldReturnAnArrayWithFilledPositions()
     {
         $this->boardMock->expects($this->exactly(3))
@@ -48,6 +54,10 @@ class GameTest extends TestCase
         $this->assertEquals(0, $game->getBoard()->getStatus()[0][0]);
     }
 
+    /**
+     * @covers Game::populateBoard
+     * @covers Game::calculateNextLifeCycle
+     */
     public function testCalculateNextLifeCycleGameBoardShouldReturnAnArrayWithModifiedPositions()
     {
         $this->boardMock->expects($this->exactly(3))
