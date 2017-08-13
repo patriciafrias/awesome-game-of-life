@@ -1,69 +1,57 @@
-Symfony Standard Edition
+Awesome Game Of Life
 ========================
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony
-application that you can use as the skeleton for your new applications.
+This is a project based on [**Symfony 3**][1]. It is an App inspired by the [**Game of Life**][2]
+devised by the British mathematician John Horton Conway in 1970.
 
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
 
-What's inside?
---------------
+Technologies
+---------------------------------
 
-The Symfony Standard Edition is configured with the following defaults:
+ * Symfony 3. 
+ * [**Vagrant**][3]Box that can be reused to setup the development environment.   
+ * [**Ansible**][4]to provision the Vagrant Box. The roles used in this project are provided by[**Geerlingguy**][7] 
+ * [**FOS Rest Bundle**][5]to add a Rest Api.  
+ * [**PHPUnit**][6]to test each part of the application implementing TDD as much as possible, either Unit and 
+   Integration tests.
 
-  * An AppBundle you can use to start coding;
+[1]:  https://symfony.com/doc/3.2
+[2]:  https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+[3]:  https://www.vagrantup.com
+[4]:  https://www.ansible.com
+[5]:  http://symfony.com/doc/master/bundles/FOSRestBundle
+[6]:  https://phpunit.de
+[7]:  https://github.com/geerlingguy
 
-  * Twig as the only configured template engine;
 
-  * Doctrine ORM/DBAL;
+Structure
+---------------------------------
+ 
+The code is separated in three bundles. 
+GameBundle contains Unit and Integration tests.
+Test code coverage can be found at var/cache/coverage.
+    
+**GameBundle**
+    This bundle contains all the logic business.                     
+           
+**ApiBundle**
+    With three endpoints to interact with the GameBundle.
+        
+**ClientBundle**
+    Containing the game UI. 
+    
 
-  * Swiftmailer;
+How setup this application
+---------------------------------
+* Install dependencies 
+    VirtualBox
+    Vagrant
+    Ansible
 
-  * Annotations enabled for everything.
-
-It comes pre-configured with the following bundles:
-
-  * **FrameworkBundle** - The core Symfony framework bundle
-
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
-
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
-
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
-
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
-
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
-
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
-
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
-
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
-
-  * [**SensioGeneratorBundle**][13] (in dev/test env) - Adds code generation
-    capabilities
-
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
-
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
-
-Enjoy!
-
-[1]:  https://symfony.com/doc/3.2/setup.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/3.2/doctrine.html
-[8]:  https://symfony.com/doc/3.2/templating.html
-[9]:  https://symfony.com/doc/3.2/security.html
-[10]: https://symfony.com/doc/3.2/email.html
-[11]: https://symfony.com/doc/3.2/logging.html
-[12]: https://symfony.com/doc/3.2/assetic/asset_management.html
-[13]: https://symfony.com/doc/current/bundles/SensioGeneratorBundle/index.html
+* Install Tic Tac Toe        
+    - Copy "vagrant_inventory.example.yml" to "vagrant_inventory.yml" and replace what you need.
+    - Check "ansible/hosts" file to make sure that some parameters match with vagrant_inventory.yml.
+    - Run "vagrant up"
+    - Run "Vagrant ssh" to access to the development box.
+    - Run "composer install"
+    - Make sure to add a new host in you /etc/hosts (check the IP in your vagrant_inventory)
