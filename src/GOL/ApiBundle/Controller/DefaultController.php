@@ -6,78 +6,98 @@ use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
+use GOL\GameBundle\Domain\PopulateFiftyPercent;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends FOSRestController
 {
     /**
      * Start game with an empty board.
      *
-     * @Rest\Get("/start-game")
+     * @Rest\Get("/initial-game")
      */
     public function startGameAction(Request $request)
     {
-        $board = new Board(40, 60);
+        $inputData = json_decode($request->getContent(), true);
 
-        $game = new Game($board);
+        $rows = $inputData['rows'];
+        $columns = $inputData['columns'];
+
+        $board = new Board($rows, $columns);
+
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
+
+        $initialBoard = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
 
         $data = [
-            'status' => 'OK',
-            'data' => $game->getBoard()->getStatus(),
+            'status' => $initialBoard,
         ];
 
-        return $this->view($data, Response::HTTP_OK);
+        return $data;
     }
 
     /**
      * Populate game with random value in each position of the board.
      *
-     * @Rest\Get("/populate-game")
+     * @Rest\Get("/populated-game")
      */
     public function populateGameAction(Request $request)
     {
-        $board = new Board(40, 60);
+        $inputData = json_decode($request->getContent(), true);
 
-        $game = new Game($board);
+        $boardStatus = $inputData['status'];
+        $boardRows = $inputData['rows'];
+        $boardColumns = $inputData['columns'];
 
-        $session = $request->getSession();
+        $board = new Board($boardRows, $boardColumns);
+
+        $board->setStatus($boardStatus);
+
+        $populateStrategy = new PopulateFiftyPercent();
+
+        $game = new Game($board, $populateStrategy);
 
         $game->populateBoard();
 
-        $newStatus = $game->getBoard();
-
-        $session->set('board', $newStatus);
+        $populatedBoard = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
 
         $data = [
-            'status' => 'OK',
-            'data' => $newStatus->getStatus(),
+            'status' => $populatedBoard,
         ];
 
-        return $this->view($data, Response::HTTP_OK);
+        return $data;
     }
 
     /**
-     * Calculate next Life cycle
+     * Get the next board status.
      *
-     * @Rest\Get("/calculate-next-cycle")
+     * @Rest\Get("/next-cycle-game")
      */
     public function calculateNextCycleAction(Request $request)
     {
-        $session = $request->getSession();
-        $board = $session->get('board');
+        $inputData = json_decode($request->getContent(), true);
 
-        $game = new Game($board);
+        $boardStatus = $inputData['status'];
+        $boardRows = $inputData['rows'];
+        $boardColumns = $inputData['columns'];
+
+        $board = new Board($boardRows, $boardColumns);
+
+        $populateStrategy = new PopulateFiftyPercent();
+        $game = new Game($board, $populateStrategy);
+
+        $board->setStatus($boardStatus);
 
         $game->calculateNextLifeCycle();
 
-        $newBoard = $game->getBoard()->getStatus();
+        $nextLifeCycleData = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
 
         $data = [
-            'status' => 'OK',
-            'data' => $newBoard,
+            'status' => $nextLifeCycleData,
         ];
 
-        return $this->view($data, Response::HTTP_OK);
+        return $data;
     }
 }

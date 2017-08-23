@@ -5,47 +5,118 @@ namespace GOL\ClientBundle\Controller;
 use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
-    /** @var string */
-    const COOKIE_FILE = '/tmp/cookie';
+    /** @const int */
+    const BOARD_ROWS = 40;
+    /** @const int */
+    const BOARD_COLUMNS = 40;
 
     /** @var string */
     private $baseUrl = 'http://apache/app_dev.php';
 
     /**
-     * Start game by default
-     *
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function indexAction(Request $request)
     {
-        $content2 = $this->executeCurlRequest($this->baseUrl . '/api/v1/start-game');
-        $content2 = $this->executeCurlRequest($this->baseUrl . '/api/v1/populate-game');
+        $client = new Client();
 
-        return $this->render('GOLClientBundle:Default:index.html.twig', ['content' => $content2]);
+        $response = $client->request(
+            'GET',
+            $this->baseUrl . '/api/v1/initial-game',
+            [
+                'json' => [
+                    'rows' => $this::BOARD_ROWS,
+                    'columns' => $this::BOARD_COLUMNS,
+                ]
+            ]);
+
+        $initialBoard = json_decode($response->getBody(), true);
+
+        $response = $this->forward(
+            'GOLClientBundle:Default:populate', ['status' => $initialBoard['status']]
+        );
+
+        return $response;
     }
 
     /**
-     * @param string $url
-     * @return mixed
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    private function executeCurlRequest(string $url)
+    public function populateAction(Request $request)
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt ($ch, CURLOPT_COOKIEJAR, self::COOKIE_FILE);
-        curl_setopt ($ch, CURLOPT_COOKIEFILE, self::COOKIE_FILE);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $boardStatus = $request->get('status');
 
-        $response = curl_exec($ch);
 
-        $content = json_decode($response, true);
+        $client = new Client();
 
-        return $content;
+        $response = $client->request(
+            'GET',
+            $this->baseUrl . '/api/v1/populated-game',
+            [
+                'json' => [
+                    'status'  => $boardStatus,
+                    'rows'    => $this::BOARD_ROWS,
+                    'columns' => $this::BOARD_COLUMNS,
+                ]
+            ]
+        );
+
+        $populatedBoard = json_decode($response->getBody(), true);
+
+        $session = $request->getSession();
+        $session->set('status', $populatedBoard['status']);
+
+        return $this->render('GOLClientBundle:Default:index.html.twig', ['content' => $populatedBoard]);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
+     */
+    public function calculateNextCycleAction(Request $request)
+    {
+        $session = $request->getSession();
+
+        if ($session->has('status')) {
+            $boardStatus = $session->get('status');
+            $session->invalidate();
+        }
+        else {
+            throw new \Exception('Error. Game is not started.');
+        }
+
+        $client = new Client();
+
+        $response = $client->request(
+            'GET',
+            $this->baseUrl . '/api/v1/next-cycle-game',
+            [
+                'json' => [
+                    'status' => $boardStatus,
+                    'rows' => $this::BOARD_ROWS,
+                    'columns' => $this::BOARD_COLUMNS,
+                ]
+            ]
+        );
+
+        $nextCycleBoard = json_decode($response->getBody(), true);
+
+        // Set status on session for next request.
+        $session = $request->getSession();
+        $session->set('status', $nextCycleBoard['status']);
+
+        return $this->render('GOLClientBundle:Default:index.html.twig', ['content' => $nextCycleBoard]);
     }
 }

@@ -1,3 +1,11 @@
 gol_client_homepage:
     path:     /
     defaults: { _controller: GOLClientBundle:Default:index }
+
+gol_client_populate:
+    path:     /populate-game
+    defaults: { _controller: GOLClientBundle:Default:populate }
+
+gol_client_calculate_next_cycle:
+    path:     /calculate-next-cycle
+    defaults: { _controller: GOLClientBundle:Default:calculateNextCycle }

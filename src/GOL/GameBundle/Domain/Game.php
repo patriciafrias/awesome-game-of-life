@@ -35,6 +35,8 @@ class Game
      */
     public function populateBoard()
     {
+        // TODO: custom exceptions
+
         $gameStatus = $this->board->getStatus();
 
         $this->board->setStatus($this->populateStrategy->populate($gameStatus));
@@ -42,6 +44,9 @@ class Game
         return $this->board->getStatus();
     }
 
+    /**
+     * Provides values for the next Life cycle.
+     */
     public function calculateNextLifeCycle()
     {
         $newGameStatus = [];
@@ -49,8 +54,7 @@ class Game
         // Walk through gameStatus.
         for ($i = 0; $i < $this->board->getRows(); $i++) {
             for ($j = 0; $j < $this->board->getColumns(); $j++) {
-
-                // Update element status (1||0)
+                // Update element status
                 $elementNewStatus = $this->getNextIterationElementStatus($i, $j);
                 $newGameStatus[$i][$j] = $elementNewStatus;
             }

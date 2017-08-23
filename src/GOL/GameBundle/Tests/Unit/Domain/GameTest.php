@@ -6,6 +6,7 @@ namespace GOL\GameBundle\Test\Unit\Domain;
 
 use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
+use GOL\GameBundle\Domain\PopulateStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,23 +18,27 @@ class GameTest extends TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|Board */
     private $boardMock = null;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|PopulateStrategyInterface */
+    private $populateStrategy = null;
+
     public function setup()
     {
         $this->boardMock = $this->getMockBuilder(Board::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->populateStrategy = $this->getMockBuilder(PopulateStrategyInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
-    /**
-     * @covers Game::getBoard
-     */
     public function testInitializedGameShouldReturnAnEmptyBoard()
     {
         $this->boardMock->expects($this->once())
             ->method('getStatus')
             ->willReturn([['', '', '', ''], ['', '', '', ''], ['', '', '', '']]);
 
-        $game = new Game($this->boardMock);
+        $game = new Game($this->boardMock, $this->populateStrategy);
 
         $this->assertEquals([['', '', '', ''], ['', '', '', ''], ['', '', '', '']], $game->getBoard()->getStatus());
     }
@@ -45,9 +50,9 @@ class GameTest extends TestCase
     {
         $this->boardMock->expects($this->exactly(3))
             ->method('getStatus')
-            ->willReturn([[0, 1, 1, 1], [1, 1, 1, ], [1, 1, 1, 1]]);
+            ->willReturn([['0', '1', '1', '1'], ['0', '0', '1', '1'], ['1', '0', '1', '1']]);
 
-        $game = new Game($this->boardMock);
+        $game = new Game($this->boardMock, $this->populateStrategy);
 
         $game->populateBoard();
 
@@ -64,7 +69,7 @@ class GameTest extends TestCase
             ->method('getStatus')
             ->willReturn([[0, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1, 1]]);
 
-        $game = new Game($this->boardMock);
+        $game = new Game($this->boardMock, $this->populateStrategy);
 
         $game->populateBoard();
         $game->calculateNextLifeCycle();
