@@ -4,7 +4,7 @@ namespace GOL\GameBundle\Test\Integration\Domain;
 
 use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
-use GOL\GameBundle\Domain\PopulateFiftyPercent;
+use GOL\GameBundle\Domain\PopulateStrategyPerc;
 use GOL\GameBundle\Domain\PopulateStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +19,7 @@ class GameTest extends TestCase
         $board = new Board(3, 3);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -37,7 +37,7 @@ class GameTest extends TestCase
         $board = new Board(3, 3);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -61,7 +61,7 @@ class GameTest extends TestCase
         $board = new Board(5, 6);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -86,7 +86,7 @@ class GameTest extends TestCase
         $board = new Board(5, 6);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -111,7 +111,7 @@ class GameTest extends TestCase
         $board = new Board(5, 6);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -136,7 +136,7 @@ class GameTest extends TestCase
         $board = new Board(5, 6);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -161,7 +161,7 @@ class GameTest extends TestCase
         $board = new Board(5, 6);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -186,7 +186,7 @@ class GameTest extends TestCase
         $board = new Board(5, 6);
 
         /** @var PopulateStrategyInterface $populateStrategy */
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 

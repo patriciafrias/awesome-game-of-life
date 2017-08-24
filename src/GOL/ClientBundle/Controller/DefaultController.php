@@ -5,8 +5,6 @@ namespace GOL\ClientBundle\Controller;
 use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class DefaultController extends Controller
 {
@@ -19,11 +17,9 @@ class DefaultController extends Controller
     private $baseUrl = 'http://apache/app_dev.php';
 
     /**
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $client = new Client();
 

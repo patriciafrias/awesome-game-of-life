@@ -85,8 +85,6 @@
 
     {% javascripts '@GOLClientBundle/Resources/public/js/*' %}
     <script>
-        // TODO: custom exception on JS
-
         // https://gomakethings.com/a-native-javascript-equivalent-of-jquerys-ready-method/
         var ready = function (fn) {
             // Sanity check
@@ -108,7 +106,7 @@
             ready(function() {
                 window.location = '/app_dev.php/calculate-next-cycle';
             });
-        }, 555554000)
+        }, 600)
     </script>
     {% endjavascripts %}
 {% endblock %}

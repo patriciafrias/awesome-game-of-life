@@ -6,7 +6,7 @@ use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use GOL\GameBundle\Domain\PopulateFiftyPercent;
+use GOL\GameBundle\Domain\PopulateStrategyPerc;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends FOSRestController
@@ -25,7 +25,7 @@ class DefaultController extends FOSRestController
 
         $board = new Board($rows, $columns);
 
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -55,7 +55,7 @@ class DefaultController extends FOSRestController
 
         $board->setStatus($boardStatus);
 
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
 
         $game = new Game($board, $populateStrategy);
 
@@ -85,7 +85,7 @@ class DefaultController extends FOSRestController
 
         $board = new Board($boardRows, $boardColumns);
 
-        $populateStrategy = new PopulateFiftyPercent();
+        $populateStrategy = new PopulateStrategyPerc();
         $game = new Game($board, $populateStrategy);
 
         $board->setStatus($boardStatus);

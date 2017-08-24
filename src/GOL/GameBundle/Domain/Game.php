@@ -17,8 +17,6 @@ class Game
     private $populateStrategy;
 
     /**
-     * Game constructor.
-     *
      * @param Board $board
      * @param PopulateStrategyInterface $populateStrategy
      */
@@ -29,8 +27,6 @@ class Game
     }
 
     /**
-     * Populate each Board element.
-     *
      * @return array
      */
     public function populateBoard()
@@ -64,7 +60,7 @@ class Game
     }
 
     /**
-     * Calculate the number of alive neighbors for a given element.
+     * Calculates the number of alive neighbors for a given element.
      *
      * @param $coordX
      * @param $coordY
