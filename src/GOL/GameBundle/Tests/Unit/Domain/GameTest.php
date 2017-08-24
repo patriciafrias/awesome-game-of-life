@@ -19,7 +19,7 @@ class GameTest extends TestCase
     private $boardMock = null;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|PopulateStrategyInterface */
-    private $populateStrategy = null;
+    private $populateStrategyMock = null;
 
     public function setup()
     {
@@ -27,7 +27,7 @@ class GameTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->populateStrategy = $this->getMockBuilder(PopulateStrategyInterface::class)
+        $this->populateStrategyMock = $this->getMockBuilder(PopulateStrategyInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -38,38 +38,39 @@ class GameTest extends TestCase
             ->method('getStatus')
             ->willReturn([['', '', '', ''], ['', '', '', ''], ['', '', '', '']]);
 
-        $game = new Game($this->boardMock, $this->populateStrategy);
+        $game = new Game($this->boardMock, $this->populateStrategyMock);
 
         $this->assertEquals([['', '', '', ''], ['', '', '', ''], ['', '', '', '']], $game->getBoard()->getStatus());
     }
 
-    /**
-     * @covers Game::populateBoard
-     */
     public function testPopulateGameBoardShouldReturnAnArrayWithFilledPositions()
     {
+        $this->populateStrategyMock->expects($this->exactly(1))
+            ->method('populate')
+            ->willReturn([[0, 1, 0, 1], [0, 0, 0, 0], [0, 1, 1, 1]]);
+
         $this->boardMock->expects($this->exactly(3))
             ->method('getStatus')
-            ->willReturn([['0', '1', '1', '1'], ['0', '0', '1', '1'], ['1', '0', '1', '1']]);
+            ->willReturn([[0, 1, 1, 1], [0, 0, 1, 1], [1, 0, 1, 1]]);
 
-        $game = new Game($this->boardMock, $this->populateStrategy);
+        $game = new Game($this->boardMock, $this->populateStrategyMock);
 
         $game->populateBoard();
 
         $this->assertEquals(0, $game->getBoard()->getStatus()[0][0]);
     }
 
-    /**
-     * @covers Game::populateBoard
-     * @covers Game::calculateNextLifeCycle
-     */
     public function testCalculateNextLifeCycleGameBoardShouldReturnAnArrayWithModifiedPositions()
     {
+        $this->populateStrategyMock->expects($this->exactly(1))
+            ->method('populate')
+            ->willReturn([[0, 1, 0, 1], [0, 0, 0, 0], [0, 1, 1, 1]]);
+
         $this->boardMock->expects($this->exactly(3))
             ->method('getStatus')
             ->willReturn([[0, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1, 1]]);
 
-        $game = new Game($this->boardMock, $this->populateStrategy);
+        $game = new Game($this->boardMock, $this->populateStrategyMock);
 
         $game->populateBoard();
         $game->calculateNextLifeCycle();
