@@ -11,5 +11,5 @@ namespace GOL\GameBundle\Domain;
  */
 interface PopulateStrategyInterface
 {
-    public function populate(array $elements);
+	public function populate(array $elements);
 }

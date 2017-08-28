@@ -6,98 +6,106 @@ use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use GOL\GameBundle\Domain\PopulateStrategyPerc;
+use GOL\GameBundle\Domain\MinorityPositivePopulateStrategy;
 use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends FOSRestController
 {
-    /**
-     * Start game with an empty board.
-     *
-     * @Rest\Get("/initial-game")
-     */
-    public function startGameAction(Request $request)
-    {
-        $inputData = json_decode($request->getContent(), true);
+	/**
+	 * Start game with an empty board.
+	 *
+	 * @Rest\Get("/initial-game")
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
+	 */
+	public function startGameAction(Request $request)
+	{
+		$inputData = json_decode($request->getContent(), true);
 
-        $rows = $inputData['rows'];
-        $columns = $inputData['columns'];
+		// TODO: may be better to add a function to get the data fields from the request.
 
-        $board = new Board($rows, $columns);
+		$boardRows = isset($inputData['rows']) ? $inputData['rows'] : null;
+		$boardColumns = isset($inputData['columns']) ? $inputData['columns'] : null;
 
-        $populateStrategy = new PopulateStrategyPerc();
+		$board = new Board($boardRows, $boardColumns);
 
-        $game = new Game($board, $populateStrategy);
+		$populateStrategy = new MinorityPositivePopulateStrategy();
 
-        $initialBoard = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
+		$game = new Game($board, $populateStrategy);
 
-        $data = [
-            'status' => $initialBoard,
-        ];
+		$initialBoard = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
 
-        return $data;
-    }
+		$data = ['status' => $initialBoard,];
 
-    /**
-     * Populate game with random value in each position of the board.
-     *
-     * @Rest\Get("/populated-game")
-     */
-    public function populateGameAction(Request $request)
-    {
-        $inputData = json_decode($request->getContent(), true);
+		return $data;
+	}
 
-        $boardStatus = $inputData['status'];
-        $boardRows = $inputData['rows'];
-        $boardColumns = $inputData['columns'];
+	/**
+	 * Populate game with random value in each position of the board.
+	 *
+	 * @Rest\Get("/populated-game")
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
+	 */
+	public function populateGameAction(Request $request)
+	{
+		$inputData = json_decode($request->getContent(), true);
 
-        $board = new Board($boardRows, $boardColumns);
+		$boardStatus = isset($inputData['status']) ? $inputData['status'] : null;
+		$boardRows = isset($inputData['rows']) ? $inputData['rows'] : null;
+		$boardColumns = isset($inputData['columns']) ? $inputData['columns'] : null;
 
-        $board->setStatus($boardStatus);
+		$board = new Board($boardRows, $boardColumns);
 
-        $populateStrategy = new PopulateStrategyPerc();
+		$board->setStatus($boardStatus);
 
-        $game = new Game($board, $populateStrategy);
+		$populateStrategy = new MinorityPositivePopulateStrategy();
 
-        $game->populateBoard();
+		$game = new Game($board, $populateStrategy);
 
-        $populatedBoard = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
+		$game->populateBoard();
 
-        $data = [
-            'status' => $populatedBoard,
-        ];
+		$populatedBoard = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
 
-        return $data;
-    }
+		$data = ['status' => $populatedBoard,];
 
-    /**
-     * Get the next board status.
-     *
-     * @Rest\Get("/next-cycle-game")
-     */
-    public function calculateNextCycleAction(Request $request)
-    {
-        $inputData = json_decode($request->getContent(), true);
+		return $data;
+	}
 
-        $boardStatus = $inputData['status'];
-        $boardRows = $inputData['rows'];
-        $boardColumns = $inputData['columns'];
+	/**
+	 * Get the next board status.
+	 *
+	 * @Rest\Get("/next-cycle-game")
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
+	 */
+	public function calculateNextCycleAction(Request $request)
+	{
+		$inputData = json_decode($request->getContent(), true);
 
-        $board = new Board($boardRows, $boardColumns);
+		$boardStatus = isset($inputData['status']) ? $inputData['status'] : null;
+		$boardRows = isset($inputData['rows']) ? $inputData['rows'] : null;
+		$boardColumns = isset($inputData['columns']) ? $inputData['columns'] : null;
 
-        $populateStrategy = new PopulateStrategyPerc();
-        $game = new Game($board, $populateStrategy);
+		$board = new Board($boardRows, $boardColumns);
 
-        $board->setStatus($boardStatus);
+		$populateStrategy = new MinorityPositivePopulateStrategy();
+		$game = new Game($board, $populateStrategy);
 
-        $game->calculateNextLifeCycle();
+		$board->setStatus($boardStatus);
 
-        $nextLifeCycleData = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
+		$game->calculateNextLifeCycle();
 
-        $data = [
-            'status' => $nextLifeCycleData,
-        ];
+		$nextLifeCycleData = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
 
-        return $data;
-    }
+		$data = ['status' => $nextLifeCycleData,];
+
+		return $data;
+	}
 }
