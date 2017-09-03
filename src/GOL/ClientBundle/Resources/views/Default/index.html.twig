@@ -83,9 +83,9 @@
         </table>
     </div>
 
-    {% javascripts '@GOLClientBundle/Resources/public/js/*' %}
+    {% javascripts '@GOLClientBundle/Resources/public/js/main.js' %}
     <script>
-        // https://gomakethings.com/a-native-javascript-equivalent-of-jquerys-ready-method/
+        // Refs: https://goo.gl/WMy813
         var ready = function (fn) {
             // Sanity check
             if (typeof fn !== 'function') return;

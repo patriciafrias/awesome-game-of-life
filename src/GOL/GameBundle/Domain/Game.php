@@ -11,19 +11,19 @@ namespace GOL\GameBundle\Domain;
 class Game
 {
 	/** @var Board|null */
-	private $board = null;
+	private $board;
 
-	/** @var  PopulateStrategyInterface */
-	private $populateStrategy;
+	/** @var  PopulationStrategyInterface */
+	private $settler;
 
 	/**
 	 * @param Board $board
-	 * @param PopulateStrategyInterface $populateStrategy
+	 * @param PopulationStrategyInterface $settler
 	 */
-	public function __construct(Board $board, PopulateStrategyInterface $populateStrategy)
+	public function __construct(Board $board, PopulationStrategyInterface $settler)
 	{
 		$this->board = $board;
-		$this->populateStrategy = $populateStrategy;
+		$this->settler = $settler;
 	}
 
 	/**
@@ -33,7 +33,9 @@ class Game
 	{
 		$gameStatus = $this->board->getStatus();
 
-		$this->board->setStatus($this->populateStrategy->populate($gameStatus));
+		$status = $this->settler->populate($gameStatus);
+
+		$this->board->setStatus($status);
 
 		return $this->board->getStatus();
 	}

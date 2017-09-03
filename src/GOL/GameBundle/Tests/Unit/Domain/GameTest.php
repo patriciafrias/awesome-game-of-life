@@ -6,7 +6,7 @@ namespace GOL\GameBundle\Test\Unit\Domain;
 
 use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
-use GOL\GameBundle\Domain\PopulateStrategyInterface;
+use GOL\GameBundle\Domain\PopulationStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,7 +18,7 @@ class GameTest extends TestCase
 	/** @var \PHPUnit_Framework_MockObject_MockObject|Board */
 	private $boardMock = null;
 
-	/** @var \PHPUnit_Framework_MockObject_MockObject|PopulateStrategyInterface */
+	/** @var \PHPUnit_Framework_MockObject_MockObject|PopulationStrategyInterface */
 	private $populateStrategyMock = null;
 
 	public function setup()
@@ -27,7 +27,7 @@ class GameTest extends TestCase
 			->disableOriginalConstructor()
 			->getMock();
 
-		$this->populateStrategyMock = $this->getMockBuilder(PopulateStrategyInterface::class)
+		$this->populateStrategyMock = $this->getMockBuilder(PopulationStrategyInterface::class)
 			->disableOriginalConstructor()
 			->getMock();
 	}

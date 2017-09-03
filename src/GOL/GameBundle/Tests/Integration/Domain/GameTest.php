@@ -4,8 +4,8 @@ namespace GOL\GameBundle\Test\Integration\Domain;
 
 use GOL\GameBundle\Domain\Board;
 use GOL\GameBundle\Domain\Game;
-use GOL\GameBundle\Domain\MinorityPositivePopulateStrategy;
-use GOL\GameBundle\Domain\PopulateStrategyInterface;
+use GOL\GameBundle\Domain\MinorityPositivePopulationStrategy;
+use GOL\GameBundle\Domain\PopulationStrategyInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,8 +18,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(3, 3);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -32,8 +32,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(3, 3);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -56,8 +56,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(5, 6);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -75,8 +75,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(5, 6);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -94,8 +94,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(5, 6);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -113,8 +113,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(5, 6);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -132,8 +132,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(5, 6);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -151,8 +151,8 @@ class GameTest extends TestCase
 	{
 		$board = new Board(5, 6);
 
-		/** @var PopulateStrategyInterface $populateStrategy */
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		/** @var PopulationStrategyInterface $populateStrategy */
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 

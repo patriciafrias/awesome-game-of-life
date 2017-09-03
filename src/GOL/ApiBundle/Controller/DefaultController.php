@@ -2,13 +2,18 @@
 
 namespace GOL\ApiBundle\Controller;
 
-use GOL\GameBundle\Domain\Board;
-use GOL\GameBundle\Domain\Game;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use GOL\GameBundle\Domain\MinorityPositivePopulateStrategy;
+use GOL\GameBundle\Domain\Board;
+use GOL\GameBundle\Domain\Game;
+use GOL\GameBundle\Domain\MinorityPositivePopulationStrategy;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class DefaultController.
+ *
+ * @package GOL\ApiBundle\Controller
+ */
 class DefaultController extends FOSRestController
 {
 	/**
@@ -31,7 +36,7 @@ class DefaultController extends FOSRestController
 
 		$board = new Board($boardRows, $boardColumns);
 
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -53,17 +58,15 @@ class DefaultController extends FOSRestController
 	 */
 	public function populateGameAction(Request $request)
 	{
-		$inputData = json_decode($request->getContent(), true);
-
-		$boardStatus = isset($inputData['status']) ? $inputData['status'] : null;
-		$boardRows = isset($inputData['rows']) ? $inputData['rows'] : null;
-		$boardColumns = isset($inputData['columns']) ? $inputData['columns'] : null;
+		$boardStatus  = $this->getDataFromRequest($request, 'status');
+		$boardRows    = $this->getDataFromRequest($request, 'rows');
+		$boardColumns = $this->getDataFromRequest($request, 'columns');
 
 		$board = new Board($boardRows, $boardColumns);
 
 		$board->setStatus($boardStatus);
 
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 
 		$game = new Game($board, $populateStrategy);
 
@@ -87,15 +90,13 @@ class DefaultController extends FOSRestController
 	 */
 	public function calculateNextCycleAction(Request $request)
 	{
-		$inputData = json_decode($request->getContent(), true);
-
-		$boardStatus = isset($inputData['status']) ? $inputData['status'] : null;
-		$boardRows = isset($inputData['rows']) ? $inputData['rows'] : null;
-		$boardColumns = isset($inputData['columns']) ? $inputData['columns'] : null;
+		$boardStatus  = $this->getDataFromRequest($request, 'status');
+		$boardRows    = $this->getDataFromRequest($request, 'rows');
+		$boardColumns = $this->getDataFromRequest($request, 'columns');
 
 		$board = new Board($boardRows, $boardColumns);
 
-		$populateStrategy = new MinorityPositivePopulateStrategy();
+		$populateStrategy = new MinorityPositivePopulationStrategy();
 		$game = new Game($board, $populateStrategy);
 
 		$board->setStatus($boardStatus);
@@ -104,8 +105,33 @@ class DefaultController extends FOSRestController
 
 		$nextLifeCycleData = $game->getBoard()->getStatus() ? $game->getBoard()->getStatus() : '';
 
-		$data = ['status' => $nextLifeCycleData,];
+		$data = ['status' => $nextLifeCycleData];
 
 		return $data;
+	}
+
+	/**
+	 * Returns the value of a given key if the key exists in the request.
+	 *
+	 * @param Request $request
+	 * @param string $dataKey
+	 *
+	 * @return null
+	 */
+	private function getDataFromRequest(Request $request, string $dataKey)
+	{
+		if ($request)
+		{
+			$inputData = json_decode($request->getContent(), true);
+
+			$dataValue = isset($inputData[$dataKey]) ? $inputData[$dataKey] : null;
+
+			// rows and columns might be integer
+			if (($dataKey == 'rows' || $dataKey == 'columns') && (!is_int($dataValue))) {
+				return false;
+			}
+		}
+
+		return $dataValue;
 	}
 }

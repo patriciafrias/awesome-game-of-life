@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace GOL\GameBundle\Domain;
 
 /**
- * Interface populateStrategyInterface
+ * Interface populateStrategyInterface.
  *
  * @package GOL\GameBundle\Domain
  */
-interface PopulateStrategyInterface
+interface PopulationStrategyInterface
 {
+	/**
+	 * @param array $elements
+	 *
+	 * @return mixed
+	 */
 	public function populate(array $elements);
 }
