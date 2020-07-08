@@ -9,10 +9,10 @@ Technologies
 ---------------------------------
 
  * Symfony 3. 
- * [**Vagrant**][3]Box that can be reused to setup the development environment.   
- * [**Ansible**][4]to provision the Vagrant Box. The roles used in this project are provided by[**Geerlingguy**][7] 
- * [**FOS Rest Bundle**][5]to add a Rest Api.  
- * [**PHPUnit**][6]to test each part of the application implementing TDD as much as possible, either Unit and 
+ * [**Vagrant**][3] Box that can be reused to setup the development environment.   
+ * [**Ansible**][4] to provision the Vagrant Box. The roles used in this project are provided by[**Geerlingguy**][7] 
+ * [**FOS Rest Bundle**][5] to add a Rest Api.  
+ * [**PHPUnit**][6] to test each part of the application implementing TDD as much as possible, either Unit and 
    Integration tests.
 
 [1]:  https://symfony.com/doc/3.2
